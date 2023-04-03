@@ -15,3 +15,40 @@ npx webpack filePath --mode=production
 5. mode（模式）
 
 ### 处理样式资源
+1. css:style-loader,css-loader
+2. less:style-loader,css-loader,less-loader
+3. s[ac]ss:style-loader,css-loader,scss-loader
+
+### 处理图片资源
+小图10kb左右转化为base64格式
+大图不变
+```javascript
+ {
+    test: /\.(png|jpe?g|git|webp|svg)$/,
+    type:"asset",
+    parser:{
+        dataUrlCondition:{
+            maxSize:10*1024,//10kb以下的图转base64
+        }
+    },
+    generator:{
+    // 图片输出路径及名称
+    filename:"images/[hash:10][ext][query]"
+    }
+}
+
+```
+
+### 处理字体图标资源和其他资源
+```javascript
+{
+    test:/\.(ttf|woff2?|map3|mp4|avi)$/,
+    type:"asset/resource",
+    generator:{
+        filename:"media/[hash:10][ext][query]"
+    }
+}
+```
+### 处理js资源eslint
+兼容性,可组装的JavaScript和JSX检测工具
+1. 配置文件：.eslintrc.(js|json|)
