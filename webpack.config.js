@@ -1,5 +1,6 @@
 const path = require("path")
-
+const ESLintPlugin = require('eslint-webpack-plugin')
+const HtmlWebpackPlugin = require('html-webpack-plugin')
 module.exports = {
     // 入口
     entry: "./src/main.js",
@@ -54,13 +55,36 @@ module.exports = {
                 generator:{
                     filename:"media/[hash:10][ext][query]"
                 }
+            },
+            // bebal loader配置
+            {
+                test:/\.js$/,
+                exclude:/node_modules/,
+                loader:"babel-loader",
+                // options:{
+                //     presets:["@babel/preset-env"]
+                // }
             }
 
         ]
     },
     // 插件
     plugins: [
-
+        // 配置eslint
+        new ESLintPlugin({
+            // 检测那些文件
+            context:path.resolve(__dirname,"src")
+        }),
+        new HtmlWebpackPlugin({
+            // 已指定html文件作为模板，创建新的html
+            // 新的html结构和原来一致，自动导入打包后的资源
+            template:path.resolve(__dirname,"public/index.html")
+        })
     ],
+    devServer       :{
+        host:"localhost",
+        port:"3001",
+        open:true,//自动打开浏览器
+    },
     mode: "development"
 }

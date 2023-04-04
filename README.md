@@ -1,4 +1,5 @@
 # SuperD Webpack Study Record
+# 基础
 ## 2023-4-2
 ### 启用webpack
 ``` cmd
@@ -49,6 +50,32 @@ npx webpack filePath --mode=production
     }
 }
 ```
+
+## 2023-4-4
 ### 处理js资源eslint
 兼容性,可组装的JavaScript和JSX检测工具
 1. 配置文件：.eslintrc.(js|json|)
+2. 忽略检测文件：.eslintignore
+详细配置说明 https://webpack.docschina.org/plugins/eslint-webpack-plugin/
+
+### babel
+1. 配置文件：.babelrc.js 配置都可以写在这个里面
+主要用与将es6语法编写的代码向后兼容，让落后的浏览器也能正常使用
+详细配置见 https://www.webpackjs.com/loaders/babel-loader/
+
+### 处理html资源
+将html一并打包至dist，并可以自动导入打包后的资源
+1. 指定html文件作为模板，创建新的html
+2. 新的html结构和原来一致，自动导入打包后的资源
+详细配置见 https://www.webpackjs.com/plugins/html-webpack-plugin/
+
+### 搭建开发服务器
+cnpm i webpack-dev-server -D
+```javascript
+devServer:{
+        host:"localhost",
+        port:"3001",
+        open:true,//自动打开浏览器
+    },
+```
+启动指令 npx webpack serve
