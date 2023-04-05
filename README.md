@@ -79,3 +79,43 @@ devServer:{
     },
 ```
 启动指令 npx webpack serve
+
+## 2023年4月5日
+### 生产模式准备工作
+dev：开发模式，无输出output，绝对路径需要回退一层
+prod：生产模式，有输出，绝对路径回退一层，无需devserver
+配置启动指令
+```json
+  "scripts": {
+    "start": "npm run dev",
+    "dev":"webpack serve --config ./config/webpack.dev.js",
+    "build":"webpack --config ./config/webpack.prod.js"
+  },
+```
+
+### css处理
+MiniCssExtractPlugin 详细配置 https://webpack.docschina.org/plugins/mini-css-extract-plugin/
+将css文件提取成单独的文件，不会出现闪屏现象，以link的方式引入样式，样式渲染更快
+
+### css兼容性处理
+```cmd
+npm i postcss-loader postcss postcss-preset-env -D
+```
+在css-loader 后 style-loader之前加上配置
+```javascript
+{
+    loader: "postcss-loader",
+    options: {
+        postcssOptions: {
+            plugins: [
+                "postcss-preset-env"
+            ]
+        }
+    }
+},
+```
+封装函数统一处理样式的loader
+
+### css压缩
+npm install css-minimizer-webpack-plugin --save-dev
+详细配置 https://webpack.docschina.org/plugins/css-minimizer-webpack-plugin/

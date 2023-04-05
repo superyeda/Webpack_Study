@@ -6,8 +6,8 @@ module.exports = {
     entry: "./src/main.js",
     // 输出
     output: {
-        // 文件输出位置
-        path: path.resolve(__dirname, "dist"),
+        // 文件输出位置 开发环境不需要输出
+        path: undefined,
         filename: "js/main.js",
         // 自动清空上次打包内容
         clean:true
@@ -73,12 +73,12 @@ module.exports = {
         // 配置eslint
         new ESLintPlugin({
             // 检测那些文件
-            context:path.resolve(__dirname,"src")
+            context:path.resolve(__dirname,"../src")
         }),
         new HtmlWebpackPlugin({
             // 已指定html文件作为模板，创建新的html
             // 新的html结构和原来一致，自动导入打包后的资源
-            template:path.resolve(__dirname,"public/index.html")
+            template:path.resolve(__dirname,"../public/index.html")
         })
     ],
     devServer       :{
