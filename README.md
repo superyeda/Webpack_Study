@@ -119,3 +119,25 @@ npm i postcss-loader postcss postcss-preset-env -D
 ### css压缩
 npm install css-minimizer-webpack-plugin --save-dev
 详细配置 https://webpack.docschina.org/plugins/css-minimizer-webpack-plugin/
+
+# 高级
+## 2023年4月7日
+### sourceMap
+用来生成源代码与构建后代码每一行每一列的一一映射的文件
+便于从构建后代码出错位置找到映射后找到源代码出错位置，从而让浏览器提示代码错误位置，帮助我们更快的找到错误根源
+1. 开发模式
+   devtool:"cheap-module-source-map", 打包速度快，只包含行映射
+2. 生产模式
+   devtool:"source-map"，打包速度慢，包含行和列映射
+
+### 提高打包构建速度
+1. 热模块替换HMR，只能由于开发环境，js需单独处理
+2. oneOf:打包时每个文件都会经过所有loader处理，但通过正则test后没有处理上，但需要都过一遍比较慢，oneOf可以让每个文件只匹配上一个loader
+3. include/Exclude：include只处理xxx文件，Exclude：不处理xxx文件
+4. cache：缓存之前的eslint检查和babel编译结果
+5. Thead：多进程打包 
+
+### 减少代码体积
+1. TreeShaking：js中没有使用上的代码，默认开启
+2. babel：babel为编译的每个文件都插入了辅助代码，使体积过大，对一些公共代码默认情况下会添加到每一个文件中，可以将这些辅助代码作为一个独立的模块
+3. 图片压缩：
