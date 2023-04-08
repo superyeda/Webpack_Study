@@ -14,15 +14,14 @@ module.exports = {
         // 文件输出位置 开发环境不需要输出
         path: undefined,
         filename: "js/main.js",
-        // 自动清空上次打包内容
+        chunkFilename: "js/[name].chunk.js",
+        assetModuleFilename: "media/[hash:10][ext][query]",
         clean: true
     },
     // 加载器
     module: {
         rules: [{
             oneOf: [
-                // loder配置
-                // 打包样式资源
                 {
                     // 处理css资源
                     test: /\.css$/,
@@ -40,7 +39,6 @@ module.exports = {
                     test: /\.s[ac]ss$/,
                     use: ["style-loader", "css-loader", "sass-loader"]
                 },
-                // 打包图片资源
                 {
                     test: /\.(png|jpe?g|git|webp|svg)$/,
                     type: "asset",
@@ -48,21 +46,12 @@ module.exports = {
                         dataUrlCondition: {
                             maxSize: 10 * 1024, //10kb以下的图转base64
                         }
-                    },
-                    generator: {
-                        // 图片输出路径及名称
-                        filename: "images/[hash:10][ext][query]"
                     }
                 },
-                // 处理iconfont和其他资源
                 {
                     test: /\.(ttf|woff2?|map3|mp4|avi)$/,
                     type: "asset/resource",
-                    generator: {
-                        filename: "media/[hash:10][ext][query]"
-                    }
                 },
-                // bebal loader配置
                 {
                     test: /\.js$/,
                     include: path.resolve(__dirname, "../src"),
@@ -91,7 +80,6 @@ module.exports = {
     plugins: [
         // 配置eslint
         new ESLintPlugin({
-            // 检测那些文件
             context: path.resolve(__dirname, "../src"),
             exclude: "node_modules",
             cache: true, //开启缓存
@@ -99,8 +87,6 @@ module.exports = {
             threads
         }),
         new HtmlWebpackPlugin({
-            // 已指定html文件作为模板，创建新的html
-            // 新的html结构和原来一致，自动导入打包后的资源
             template: path.resolve(__dirname, "../public/index.html")
         })
     ],
@@ -112,7 +98,10 @@ module.exports = {
             new TerserWebpackPlugin({ //terser用于压缩html代码
                 parallel: threads //开启多进程
             })
-        ]
+        ],
+        splitChunks: {
+            chunks: "all",
+        }
     },
     devServer: {
         host: "localhost",

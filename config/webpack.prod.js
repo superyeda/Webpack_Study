@@ -27,12 +27,20 @@ function getStyleLoader(pre) {
 
 module.exports = {
     // 入口
-    entry: "./src/main.js",
+    entry: {
+        main: "./src/main.js",
+        app: './src/app.js'
+
+    },
     // 输出
     output: {
         // 文件输出位置
         path: path.resolve(__dirname, "../dist"),
-        filename: "../js/main.js",
+        filename: "js/[name].[contenthash:10].js",
+        // 给打包输出的其他文件命名（动态加载）
+        chunkFilename: "js/[name].chunk.[contenthash:10].js",
+        // 图片，字体等通过type:asset处理资源命名方式
+        assetModuleFilename: "media/[hash:10][ext][query]",
         // 自动清空上次打包内容
         clean: true
     },
@@ -67,18 +75,19 @@ module.exports = {
                                 maxSize: 10 * 1024, //10kb以下的图转base64
                             }
                         },
-                        generator: {
-                            // 图片输出路径及名称
-                            filename: "images/[hash:10][ext][query]"
-                        }
+                        // output统一处理
+                        // generator: {
+                        //     // 图片输出路径及名称
+                        //     filename: "images/[hash:10][ext][query]"
+                        // }
                     },
                     // 处理iconfont和其他资源
                     {
                         test: /\.(ttf|woff2?|map3|mp4|avi)$/,
                         type: "asset/resource",
-                        generator: {
-                            filename: "media/[hash:10][ext][query]"
-                        }
+                        // generator: {
+                        //     filename: "media/[hash:10][ext][query]"
+                        // }
                     },
                     // bebal loader配置
                     {
@@ -96,13 +105,11 @@ module.exports = {
                                     // presets:["@babel/preset-env"]
                                     cacheDirectory: true, //开启babel缓存
                                     cacheCompression: false, //关闭缓存文件压缩
-                                    plugins:["@babel/plugin-transform-runtime"],//避免重复引入，减少代码体积
+                                    plugins: ["@babel/plugin-transform-runtime"], //避免重复引入，减少代码体积
                                 }
                             }
-                        ],
-
+                        ]
                     }
-
                 ]
             }
         ]
@@ -125,7 +132,9 @@ module.exports = {
         }),
         // 打包单独生成css文件
         new MiniCssExtractPlugin({
-            filename: "css/main.css"
+            // contenthash:10内容变化hash才变
+            filename: "css/[name].[contenthash:10].css",
+            chunkFilename: "css/[name].chunk.[contenthash:10].css"
         }),
 
     ],
@@ -137,7 +146,16 @@ module.exports = {
             new TerserWebpackPlugin({ //terser用于压缩html代码
                 parallel: threads //开启多进程
             })
-        ]
+        ],
+        // 代码分割配置
+        splitChunks: {
+            chunks: "all",
+            // 其他都使用默认配置
+        },
+        // 文件和hash对应关系文件，只打包修改对应的文件
+        runtimeChunk:{
+            name:(entrypoint)=>`runtime~${entrypoint.name}.js`
+        }
     },
     mode: "production",
     devtool: "source-map",

@@ -1,0 +1,2 @@
+"use strict";(self.webpackChunkwebpack_study=self.webpackChunkwebpack_study||[]).push([[179],{167:function(e,n,t){var c=(e,n)=>e+n;console.log(c(1,2)),document.getElementById("btn").onclick=()=>{t.e(800).then(t.bind(t,901)).then((e=>{console.log(e.default(1,2,3,4,5))}))}}},function(e){var n;n=167,e(e.s=n)}]);
+//# sourceMappingURL=main.c909e4797d.js.map

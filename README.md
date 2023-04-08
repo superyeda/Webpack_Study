@@ -126,7 +126,7 @@ npm install css-minimizer-webpack-plugin --save-dev
 用来生成源代码与构建后代码每一行每一列的一一映射的文件
 便于从构建后代码出错位置找到映射后找到源代码出错位置，从而让浏览器提示代码错误位置，帮助我们更快的找到错误根源
 1. 开发模式
-   devtool:"cheap-module-source-map", 打包速度快，只包含行映射
+   devtool:"   -module-source-map", 打包速度快，只包含行映射
 2. 生产模式
    devtool:"source-map"，打包速度慢，包含行和列映射
 
@@ -141,3 +141,25 @@ npm install css-minimizer-webpack-plugin --save-dev
 1. TreeShaking：js中没有使用上的代码，默认开启
 2. babel：babel为编译的每个文件都插入了辅助代码，使体积过大，对一些公共代码默认情况下会添加到每一个文件中，可以将这些辅助代码作为一个独立的模块
 3. 图片压缩：
+
+### 优化代码性能
+codeSplit
+1. 对需要打包的代码分割，生成多个js文件，多个入口文件
+2. 处理公共模块 
+3. 多入口按需载入，动态加载返回一个promise（import(xxx).then()）
+4. 模块命名chunk和主文件
+
+preload/prefetch
+在浏览器空闲时，加载后续需要使用的资源，只加载不执行，都有缓存，兼容性都很差
+1. preload：兼容性相对较好，告诉浏览器立即加载资源
+2. prefetch：兼容性差，浏览器空闲时才开始加载
+
+NetWork cache
+1. 使用contenthash文件内容不变hash也不变，好做缓存
+2. 用runtime记录hash和依赖文件的对应关系
+
+core-js
+解决js兼容性问题
+
+PWA
+离线访问，兼容性差
